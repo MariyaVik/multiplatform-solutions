@@ -1,7 +1,9 @@
 import 'dart:io' if (dart.library.html) 'dart:ui' as ui;
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:skillbox_16_6/data/load_web.dart';
 
@@ -18,6 +20,7 @@ class _WebPageState extends State<WebPage> {
   String text = '';
   String titile = '';
   String cors = '';
+  String os = kIsWeb ? 'WEB' : Platform.operatingSystem;
   late TextEditingController controller;
 
   @override
@@ -34,56 +37,63 @@ class _WebPageState extends State<WebPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    titile,
-                    style: const TextStyle(
-                        fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    cors == '' ? '' : 'CORS header: $cors',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
-                  Text(text),
-                ],
-              ),
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  titile,
+                  style: const TextStyle(
+                      fontSize: 36, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  cors == '' ? '' : 'CORS header: $cors',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                Text(text),
+              ],
             ),
           ),
-          Row(
+        ),
+        ColoredBox(
+          color: Colors.black12,
+          child: Column(
             children: [
-              Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: controller,
-                      // initialValue: 'https://flutter.dev/',
-                      decoration: InputDecoration(border: OutlineInputBorder()),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        webService.url = controller.text;
-                        text = await webService.getWebBody();
-                        titile = await webService.getWebTitle();
-                        cors = await webService.getWebCORS();
-                        setState(() {});
-                      },
-                      child: Text('Открыть')))
+              Row(
+                children: [
+                  Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: controller,
+                          // initialValue: 'https://flutter.dev/',
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
+                        ),
+                      )),
+                  Expanded(
+                      flex: 1,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            webService.url = controller.text;
+                            text = await webService.getWebBody();
+                            titile = await webService.getWebTitle();
+                            cors = await webService.getWebCORS();
+                            setState(() {});
+                          },
+                          child: Text('Открыть')))
+                ],
+              ),
+              Center(
+                child: Text('Приложение запущено на ОС $os'),
+              )
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
