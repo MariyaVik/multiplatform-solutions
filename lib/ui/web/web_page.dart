@@ -1,5 +1,5 @@
 import '../../data/load_web.dart';
-import 'web_for_mobile.dart' if (dart.library.html) 'web_for_web.dart';
+import 'web_for_no_web.dart' if (dart.library.html) 'web_for_web.dart';
 import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
@@ -39,26 +39,23 @@ class _WebPageState extends State<WebPage> {
     return Column(
       children: [
         Expanded(
-          child: ColoredBox(
-            color: Colors.pink,
-            child: Column(
-              children: [
-                Text(
-                  titile,
-                  style: const TextStyle(
-                      fontSize: 36, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  cors == '' ? '' : 'CORS header: $cors',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-                // Text(text),
-                if (controller.text != '')
-                  Expanded(
-                    child: WebLink(link: controller.text),
-                  )
-              ],
-            ),
+          child: Column(
+            children: [
+              Text(
+                titile,
+                style:
+                    const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                cors == '' ? '' : 'CORS header: $cors',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              // Text(text),
+              if (controller.text != '')
+                Expanded(
+                  child: WebLink(link: controller.text),
+                )
+            ],
           ),
         ),
         ColoredBox(
@@ -73,8 +70,8 @@ class _WebPageState extends State<WebPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: controller,
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder()),
                         ),
                       )),
                   Expanded(
@@ -87,10 +84,10 @@ class _WebPageState extends State<WebPage> {
                             titile = await webService.getWebTitle();
                             cors = await webService.getWebCORS();
 
-                            print('!!!!!!!!!!!!!!!!!!!!!  ' + controller.text);
+                            print('!!!!!!!!!!!!!!!!!!!!!  ${controller.text}');
                             setState(() {});
                           },
-                          child: Text('Открыть')))
+                          child: const Text('Открыть')))
                 ],
               ),
               Center(

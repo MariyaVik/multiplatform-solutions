@@ -4,7 +4,7 @@ class WebService {
   late String url;
   Future<String> getWebBody() async {
     final response = await http.get(Uri.parse(url));
-    return response.headers.toString() + '\n\n\n' + response.body;
+    return '${response.headers}\n\n\n${response.body}';
   }
 
   Future<String> getWebTitle() async {
