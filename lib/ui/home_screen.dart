@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'web_page.dart';
+import 'web/web_page.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});

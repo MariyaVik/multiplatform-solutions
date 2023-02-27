@@ -1,11 +1,9 @@
-import 'dart:io' if (dart.library.html) 'dart:ui' as ui;
-import 'dart:io';
-import 'dart:math';
-import 'dart:ui' as ui;
+import '../../data/load_web.dart';
+import 'web_for_mobile.dart' if (dart.library.html) 'web_for_web.dart';
+import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:skillbox_16_6/data/load_web.dart';
 
 class WebPage extends StatefulWidget {
   const WebPage({Key? key}) : super(key: key);
@@ -20,7 +18,8 @@ class _WebPageState extends State<WebPage> {
   String text = '';
   String titile = '';
   String cors = '';
-  String os = kIsWeb ? 'WEB' : Platform.operatingSystem;
+  String os = kIsWeb ? 'WEB' : io.Platform.operatingSystem;
+
   late TextEditingController controller;
 
   @override
@@ -40,7 +39,8 @@ class _WebPageState extends State<WebPage> {
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
+          child: ColoredBox(
+            color: Colors.pink,
             child: Column(
               children: [
                 Text(
@@ -52,7 +52,11 @@ class _WebPageState extends State<WebPage> {
                   cors == '' ? '' : 'CORS header: $cors',
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
-                Text(text),
+                // Text(text),
+                if (controller.text != '')
+                  Expanded(
+                    child: WebLink(link: controller.text),
+                  )
               ],
             ),
           ),
@@ -69,7 +73,6 @@ class _WebPageState extends State<WebPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: controller,
-                          // initialValue: 'https://flutter.dev/',
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -78,17 +81,20 @@ class _WebPageState extends State<WebPage> {
                       flex: 1,
                       child: ElevatedButton(
                           onPressed: () async {
+                            print('нажали');
                             webService.url = controller.text;
                             text = await webService.getWebBody();
                             titile = await webService.getWebTitle();
                             cors = await webService.getWebCORS();
+
+                            print('!!!!!!!!!!!!!!!!!!!!!  ' + controller.text);
                             setState(() {});
                           },
                           child: Text('Открыть')))
                 ],
               ),
               Center(
-                child: Text('Приложение запущено на ОС $os'),
+                child: Text('Приложение запущено на $os'),
               )
             ],
           ),
@@ -97,17 +103,3 @@ class _WebPageState extends State<WebPage> {
     );
   }
 }
-
-// class WebLink extends StatelessWidget {
-//   const WebLink({required this.link, Key? key}) : super(key: key);
-//   final String link;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final id = Random().nextInt.toString();
-//     // ignore: undefined_prefixed_name
-//     ui.platformViewRegistry
-//         .registerViewFactory(id, (int viewId) => IFrameElement()..src = link);
-//     return HtmlElementView(viewType: id);
-//   }
-// }
